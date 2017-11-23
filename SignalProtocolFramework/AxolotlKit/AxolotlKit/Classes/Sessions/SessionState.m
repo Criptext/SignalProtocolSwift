@@ -163,7 +163,6 @@ static NSString* const kCoderPendingPrekey    = @"kCoderPendingPrekey";
     if (receiverChain == nil) {
         return nil;
     } else{
-        SPKAssert(receiverChain.chainKey.key);
         return [[ChainKey alloc] initWithData:receiverChain.chainKey.key index:receiverChain.chainKey.index];
     }
 }

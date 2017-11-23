@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'SignalProtocolSwift'
-  s.version          = '0.3'
+  s.version          = '0.4'
   s.summary          = 'SignalProtocolSwift is a wrapper of the Signal Protocol written in Objective-C.'
  
   s.description      = <<-DESC

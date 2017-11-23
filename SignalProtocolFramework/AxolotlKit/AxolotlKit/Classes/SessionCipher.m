@@ -290,9 +290,7 @@ static dispatch_queue_t _sessionCipherDispatchQueue;
     NSData *theirEphemeral   = message.senderRatchetKey.removeKeyType;
     int counter              = message.counter;
     ChainKey *chainKey       = [self getOrCreateChainKeys:sessionState theirEphemeral:theirEphemeral];
-    SPKAssert(chainKey);
     MessageKeys *messageKeys = [self getOrCreateMessageKeysForSession:sessionState theirEphemeral:theirEphemeral chainKey:chainKey counter:counter];
-    SPKAssert(messageKeys);
 
     [message verifyMacWithVersion:messageVersion senderIdentityKey:sessionState.remoteIdentityKey receiverIdentityKey:sessionState.localIdentityKey macKey:messageKeys.macKey];
     
@@ -305,7 +303,6 @@ static dispatch_queue_t _sessionCipherDispatchQueue;
 
 - (ChainKey*)getOrCreateChainKeys:(SessionState*)sessionState theirEphemeral:(NSData*)theirEphemeral{
     [self assertOnSessionCipherDispatchQueue];
-    SPKAssert(theirEphemeral.length == ECCKeyLength);
 
     @try {
         if ([sessionState hasReceiverChain:theirEphemeral]) {
@@ -314,22 +311,17 @@ static dispatch_queue_t _sessionCipherDispatchQueue;
         } else{
             DDLogInfo(@"%@ %@.%d creating new chains.", self.tag, self.recipientId, self.deviceId);
             RootKey *rootKey = [sessionState rootKey];
-            SPKAssert(rootKey.keyData.length == ECCKeyLength);
 
             ECKeyPair *ourEphemeral = [sessionState senderRatchetKeyPair];
-            SPKAssert(ourEphemeral.publicKey.length == ECCKeyLength);
 
             RKCK *receiverChain = [rootKey createChainWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
 
             ECKeyPair *ourNewEphemeral = [Curve25519 generateKeyPair];
-            SPKAssert(ourNewEphemeral.publicKey.length == ECCKeyLength);
 
             RKCK *senderChain = [receiverChain.rootKey createChainWithTheirEphemeral:theirEphemeral ourEphemeral:ourNewEphemeral];
 
-            SPKAssert(senderChain.rootKey.keyData.length == ECCKeyLength);
             [sessionState setRootKey:senderChain.rootKey];
 
-            SPKAssert(receiverChain.chainKey.key.length == ECCKeyLength);
             [sessionState addReceiverChain:theirEphemeral chainKey:receiverChain.chainKey];
             [sessionState setPreviousCounter:MAX(sessionState.senderChainKey.index-1 , 0)];
             [sessionState setSenderChain:ourNewEphemeral chainKey:senderChain.chainKey];

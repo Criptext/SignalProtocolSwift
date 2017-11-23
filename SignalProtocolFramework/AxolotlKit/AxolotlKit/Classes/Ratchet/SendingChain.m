@@ -36,9 +36,6 @@ static NSString* const kCoderSenderRatchet = @"kCoderSenderRatchet";
 - (instancetype)initWithChainKey:(ChainKey *)chainKey senderRatchetKeyPair:(ECKeyPair *)keyPair{
     self = [super init];
 
-    SPKAssert(chainKey.key.length == ECCKeyLength);
-    SPKAssert(keyPair);
-
     if (self) {
         _chainKey             = chainKey;
         _senderRatchetKeyPair = keyPair;
