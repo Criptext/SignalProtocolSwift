@@ -15,6 +15,7 @@
     uint8_t privateKey[ECCKeyLength];
 }
 
+-(NSData*) sign:(NSData*)data;
 -(NSData*) publicKey;
 
 @end
