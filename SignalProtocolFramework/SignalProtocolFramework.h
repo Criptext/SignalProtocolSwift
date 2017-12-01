@@ -13,6 +13,8 @@
 #import "RatchetingSession.h"
 #import "SessionBuilder.h"
 #import "SessionCipher.h"
+#import "AxolotlExceptions.h"
+#import "Ed25519.h"
 
 //! Project version number for SignalProtocolFramework.
 FOUNDATION_EXPORT double SignalProtocolFrameworkVersionNumber;
